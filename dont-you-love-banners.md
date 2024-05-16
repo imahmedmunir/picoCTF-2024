@@ -198,7 +198,7 @@ try:
             break
 
 except:
-    KeyboardInterrupt**
+    KeyboardInterrupt
 
 **Note: We can see that everytime we connect back to server, it loads /home/player/banner**
 
